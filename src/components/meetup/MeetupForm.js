@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-function NewMeetupForm(props) {
+function MeetupForm(props) {
   const titleInputRef = useRef();
   const imageInputRef = useRef();
   const addressInputRef = useRef();
@@ -25,7 +25,7 @@ function NewMeetupForm(props) {
   }
 
   return (
-    <div className="w-1/4 min-w-[300px] flex justify-center rounded-lg bg-white shadow-lg py-2 mx-auto mt-10">
+    <div className="w-1/4 min-w-[300px] flex justify-center rounded-lg bg-white shadow-lg py-10 mx-auto mt-[10vh]">
       <form
         className="grid grid-cols-1 gap-4 p-4 text-left"
         onSubmit={submitHandler}
@@ -43,6 +43,7 @@ function NewMeetupForm(props) {
             id="title"
             ref={titleInputRef}
             className="w-full px-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            defaultValue={props.title}
           />
         </div>
         <div className="flex flex-col">
@@ -58,6 +59,7 @@ function NewMeetupForm(props) {
             id="image"
             ref={imageInputRef}
             className="w-full px-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            defaultValue={props.image}
           />
         </div>
         <div className="flex flex-col">
@@ -73,6 +75,7 @@ function NewMeetupForm(props) {
             id="address"
             ref={addressInputRef}
             className="w-full px-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            defaultValue={props.address}
           />
         </div>
         <div className="flex flex-col">
@@ -88,11 +91,12 @@ function NewMeetupForm(props) {
             rows="5"
             ref={descriptionInputRef}
             className="w-full px-3 py-1 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            defaultValue={props.description}
           ></textarea>
         </div>
         <div className="justify-self-center">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
-            Add Meetup
+            {props.id ? "Update Meetup" : "Add Meetup"}
           </button>
         </div>
       </form>
@@ -100,4 +104,4 @@ function NewMeetupForm(props) {
   );
 }
 
-export default NewMeetupForm;
+export default MeetupForm;

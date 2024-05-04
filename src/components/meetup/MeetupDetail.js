@@ -42,12 +42,21 @@ const MeetupDetail = (props) => {
             {props.address}
           </address>
           <p className="text-gray-800">{props.description}</p>
-          <button
-            className="bg-rose-700 text-white font-semibold p-2 rounded-md text-center"
-            onClick={deleteMeetupHandler}
-          >
-            Delete Meetup
-          </button>
+          <div className="flex gap-3">
+            <button
+              className="bg-rose-700 text-white font-semibold p-2 rounded-md text-center"
+              onClick={deleteMeetupHandler}
+            >
+              Delete Meetup
+            </button>
+
+            <button
+              className="bg-[#7469B6] text-white font-semibold p-2 rounded-md text-center"
+              onClick={() => router.push(`/${props.id}/edit`)}
+            >
+              Update Meetup
+            </button>
+          </div>
         </>
       )}
     </section>
