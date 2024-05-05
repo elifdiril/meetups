@@ -1,19 +1,29 @@
-import { MongoClient } from 'mongodb';
+import connectDB from "../db";
 
+async function insertDocument(client, document) {
+  const db = client.db();
+  await db.collection('meetups').insertOne(document);
+}
 async function handler(req, res) {
   if (req.method === 'POST') {
     const data = req.body;
 
-    const client = await MongoClient.connect(
-      'mongodb+srv://elif:test123@cluster0.ehz8iuk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-    );
-    const db = client.db();
+    let client;
 
-    const meetupsCollection = db.collection('meetups');
+    try {
+      client = await connectDB();
+    } catch (error) {
+      res.status(500).json({ message: 'Connecting to DB failed!' });
+      return;
+    }
 
-    const result = await meetupsCollection.insertOne(data);
-
-    client.close();
+    try {
+      await insertDocument(client, data);
+      client.close();
+    } catch (error) {
+      res.status(500).json({ message: 'Inserting data failed!' });
+      return;
+    }
 
     res.status(201).json({ message: 'Meetup inserted!' });
   }

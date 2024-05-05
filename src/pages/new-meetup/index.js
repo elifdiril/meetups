@@ -1,8 +1,8 @@
-import { Fragment, useState } from 'react';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import NewMeetupForm from '../../components/meetup/MeetupForm';
-import Loader from '@/components/ui/Loader';
+import { Fragment, useState } from "react";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import NewMeetupForm from "../../components/meetup/MeetupForm";
+import Loader from "@/components/ui/Loader";
 
 function NewMeetupPage() {
   const router = useRouter();
@@ -10,19 +10,21 @@ function NewMeetupPage() {
 
   async function addMeetupHandler(enteredMeetupData) {
     setIsLoading(true);
-    const response = await fetch('/api/new-meetup', {
-      method: 'POST',
+    const response = await fetch("/api/new-meetup", {
+      method: "POST",
       body: JSON.stringify(enteredMeetupData),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
-    const data = await response.json();
-
+    if (response.ok) {
+      router.push("/");
+    } else {
+      const data = await response.json();
+      console.log(data.message);
+    }
     setIsLoading(false);
-
-    router.push('/');
   }
 
   return (
@@ -30,11 +32,15 @@ function NewMeetupPage() {
       <Head>
         <title>+New Meetup</title>
         <meta
-          name='description'
-          content='Add your own meetups and create amazing networking opportunities.'
+          name="description"
+          content="Add your own meetups and create amazing networking opportunities."
         />
       </Head>
-      {isLoading ? <Loader /> : <NewMeetupForm onAddMeetup={addMeetupHandler} />}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <NewMeetupForm onAddMeetup={addMeetupHandler} />
+      )}
     </Fragment>
   );
 }

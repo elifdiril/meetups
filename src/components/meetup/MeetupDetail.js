@@ -8,10 +8,10 @@ const MeetupDetail = (props) => {
 
   const router = useRouter();
 
-  const deleteMeetupHandler = () => {
+  const deleteMeetupHandler = async () => {
     setIsLoading(true);
 
-    const response = fetch("/api/delete-meetup", {
+    const response = await fetch("/api/delete-meetup", {
       method: "DELETE",
       body: JSON.stringify(props.id),
       headers: {
@@ -19,13 +19,18 @@ const MeetupDetail = (props) => {
       },
     });
 
-    setIsLoading(false);
+    if (response.ok) {
+      router.push("/");
+    } else {
+      const data = await response.json();
+      console.log(data.message);
+    }
 
-    router.push("/");
+    setIsLoading(false);
   };
 
   return (
-    <section className="flex flex-col gap-3 bg-white p-10 rounded-lg shadow-lg justify-center w-2/5 items-center m-auto my-[10vh]">
+    <section className="flex flex-col gap-3 bg-white p-10 rounded-lg shadow-lg justify-center w-2/5 items-center m-auto my-[10vh] min-w-[550px]">
       {isLoading ? (
         <Loader />
       ) : (
@@ -36,6 +41,7 @@ const MeetupDetail = (props) => {
             width={500}
             height={300}
             className="rounded-lg mt-2"
+            fetchPriority="low"
           />
           <h1 className="text-2xl font-bold capitalize">{props.title}</h1>
           <address className="text-gray-700 capitalize">

@@ -21,9 +21,13 @@ function UpdateMeetupPage(props) {
     });
 
     const data = await response.json();
-    setMeetupData(data.result);
+    if (response.ok) {
+      router.push(`/${router.query.meetupId}`);
+      setMeetupData(data.result);
+    } else {
+      console.log(data.message);
+    }
 
-    router.push(`/${router.query.meetupId}`);
     setIsLoading(false);
   }
 
