@@ -1,7 +1,7 @@
 const { MongoClient, ObjectId } = require("mongodb");
 
 async function handler(req, res) {
-  if (req.method === "PUT") {
+  if (req.method === "PATCH") {
     const data = req.body;
     const client = await MongoClient.connect(
       "mongodb+srv://elif:test123@cluster0.ehz8iuk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -12,7 +12,7 @@ async function handler(req, res) {
 
     const result = await meetupsCollection.updateOne(
       {
-        _id: new ObjectId(data.id),
+        _id: new ObjectId(req.query.meetupId),
       },
       {
         $set: {
@@ -25,7 +25,7 @@ async function handler(req, res) {
     );
     client.close();
 
-    res.status(201).json({ message: "Meetup updated!", result: result });
+    res.status(201).json({ message: "Meetup updated!", result: data });
   }
 }
 

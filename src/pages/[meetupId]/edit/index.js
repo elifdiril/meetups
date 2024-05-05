@@ -1,24 +1,29 @@
 import { Fragment, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import NewMeetupForm from '../../../components/meetup/MeetupForm';
+import MeetupForm from '../../../components/meetup/MeetupForm';
 import Loader from '@/components/ui/Loader';
 import { MongoClient, ObjectId } from 'mongodb';
 
 function UpdateMeetupPage(props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [meetupData, setMeetupData] = useState({...props.meetupData});
 
   async function updateMeetupHandler(enteredMeetupData) {
     setIsLoading(true);
     const response = await fetch(`/api/update-meetup/${router.query.meetupId}`, {
-      method: 'PUT',
+      method: 'PATCH',
       body: JSON.stringify(enteredMeetupData),
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
+    const data = await response.json();
+    setMeetupData(data.result);
+
+    router.push(`/${router.query.meetupId}`);
     setIsLoading(false);
   }
 
@@ -31,7 +36,7 @@ function UpdateMeetupPage(props) {
           content='Update your meetups and create amazing networking opportunities.'
         />
       </Head>
-      {isLoading ? <Loader /> : <NewMeetupForm onAddMeetup={updateMeetupHandler} {...props.meetupData}  />}
+      {isLoading ? <Loader /> : <MeetupForm onAddMeetup={updateMeetupHandler} {...meetupData}  />}
     </Fragment>
   );
 }

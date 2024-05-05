@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useRef } from "react";
 
 function MeetupForm(props) {
@@ -5,6 +6,7 @@ function MeetupForm(props) {
   const imageInputRef = useRef();
   const addressInputRef = useRef();
   const descriptionInputRef = useRef();
+  const router = useRouter()
 
   function submitHandler(event) {
     event.preventDefault();
@@ -96,7 +98,7 @@ function MeetupForm(props) {
         </div>
         <div className="justify-self-center">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
-            {props.id ? "Update Meetup" : "Add Meetup"}
+            {router.query.meetupId ? "Update Meetup" : "Add Meetup"}
           </button>
         </div>
       </form>
