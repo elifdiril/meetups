@@ -4,8 +4,8 @@
 - Tailwind
 - MongoDB
 
-![](https://github.com/elifdiril/meetups/blob/master/public/s1.webm)
-![](https://github.com/elifdiril/meetups/blob/master/public/s2.webm)
+![](https://github.com/elifdiril/meetups/blob/master/public/s1.mp4)
+![](https://github.com/elifdiril/meetups/blob/master/public/s2.mp4)
 
 
 ## In order to run this project in your local environment
