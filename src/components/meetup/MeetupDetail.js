@@ -2,10 +2,11 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Loader from "../ui/Loader";
 import { useRouter } from "next/router";
+import { useNotificationContext } from "@/context/NotificationContext";
 
 const MeetupDetail = (props) => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const { showNotification } = useNotificationContext();
   const router = useRouter();
 
   const deleteMeetupHandler = async () => {
@@ -20,9 +21,20 @@ const MeetupDetail = (props) => {
     });
 
     if (response.ok) {
+      showNotification({
+        status: "success",
+        title: "Success!",
+        message: "Meetup deleted successfully!",
+      });
       router.push("/");
     } else {
       const data = await response.json();
+
+      showNotification({
+        status: "error",
+        title: "Error!",
+        message: data.message,
+      });
       console.log(data.message);
     }
 
@@ -30,11 +42,11 @@ const MeetupDetail = (props) => {
   };
 
   return (
-    <section className="flex flex-col gap-3 bg-white p-10 rounded-lg shadow-lg justify-center w-2/5 items-center m-auto my-[10vh] min-w-[550px]">
+    <>
       {isLoading ? (
         <Loader />
       ) : (
-        <>
+        <section className="flex flex-col gap-3 bg-white p-10 rounded-lg shadow-lg justify-center w-2/5 items-center m-auto my-[10vh] min-w-[550px]">
           <Image
             src={props.image}
             alt={props.title}
@@ -63,9 +75,9 @@ const MeetupDetail = (props) => {
               Update Meetup
             </button>
           </div>
-        </>
+        </section>
       )}
-    </section>
+    </>
   );
 };
 

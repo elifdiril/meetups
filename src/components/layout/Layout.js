@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react';
 import MainNavigation from './MainNavigation';
 import Loader from '../ui/Loader';
 import { useRouter } from 'next/router';
+import Notification from '../ui/Notification';
+import { useNotificationContext } from '@/context/NotificationContext';
 
 function Layout(props) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const notificationCtx = useNotificationContext();
+  const activeNotification = notificationCtx.notification;
 
   useEffect(() => {
     const handleStart = () => setLoading(true);
@@ -28,6 +32,7 @@ function Layout(props) {
       <MainNavigation />
       {loading && <Loader />}
       <main className="w-11/12">{props.children}</main>
+      {activeNotification && <Notification title={activeNotification.title} message={activeNotification.message} status={activeNotification.status} />}
     </div>
   );
 }

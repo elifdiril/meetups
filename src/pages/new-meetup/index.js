@@ -1,12 +1,14 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import NewMeetupForm from "../../components/meetup/MeetupForm";
 import Loader from "@/components/ui/Loader";
+import { useNotificationContext } from "@/context/NotificationContext";
 
 function NewMeetupPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { showNotification } = useNotificationContext();
 
   async function addMeetupHandler(enteredMeetupData) {
     setIsLoading(true);
@@ -19,16 +21,25 @@ function NewMeetupPage() {
     });
 
     if (response.ok) {
+      showNotification({
+        status: "success",
+        title: "Success!",
+        message: "Meetup added successfully!",
+      });
       router.push("/");
     } else {
       const data = await response.json();
-      console.log(data.message);
+      showNotification({
+        status: "error",
+        title: "Error!",
+        message: data.message,
+      });
     }
     setIsLoading(false);
   }
 
   return (
-    <Fragment>
+    <div className="h-screen">
       <Head>
         <title>+New Meetup</title>
         <meta
@@ -41,7 +52,7 @@ function NewMeetupPage() {
       ) : (
         <NewMeetupForm onAddMeetup={addMeetupHandler} />
       )}
-    </Fragment>
+    </div>
   );
 }
 

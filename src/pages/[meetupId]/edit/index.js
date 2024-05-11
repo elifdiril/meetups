@@ -1,14 +1,16 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import MeetupForm from '../../../components/meetup/MeetupForm';
 import Loader from '@/components/ui/Loader';
 import { MongoClient, ObjectId } from 'mongodb';
+import { useNotificationContext } from '@/context/NotificationContext';
 
 function UpdateMeetupPage(props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [meetupData, setMeetupData] = useState({...props.meetupData});
+  const { showNotification } = useNotificationContext();
 
   async function updateMeetupHandler(enteredMeetupData) {
     setIsLoading(true);
@@ -22,9 +24,19 @@ function UpdateMeetupPage(props) {
 
     const data = await response.json();
     if (response.ok) {
+      showNotification({
+        status: 'success',
+        title: 'Success!',
+        message: 'Meetup updated successfully!',
+      });
       router.push(`/${router.query.meetupId}`);
       setMeetupData(data.result);
     } else {
+      showNotification({
+        status: 'error',
+        title: 'Error!',
+        message: data.message,
+      });
       console.log(data.message);
     }
 
@@ -32,7 +44,7 @@ function UpdateMeetupPage(props) {
   }
 
   return (
-    <Fragment>
+    <div className='h-screen'>
       <Head>
         <title>Update Meetup</title>
         <meta
@@ -41,7 +53,7 @@ function UpdateMeetupPage(props) {
         />
       </Head>
       {isLoading ? <Loader /> : <MeetupForm onAddMeetup={updateMeetupHandler} {...meetupData}  />}
-    </Fragment>
+    </div>
   );
 }
 
